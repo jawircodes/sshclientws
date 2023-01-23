@@ -44,6 +44,7 @@ type Host struct {
 func main() {
 	Init()
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
+	gin.SetMode(gin.ReleaseMode)
 	e := gin.Default()
 	e.Use(cors.Default())
 	e.GET("/ws", WsSsh)
