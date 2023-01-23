@@ -1,0 +1,13 @@
+[Unit]
+Description=SSH socket service
+
+[Service]
+User=root
+ExecStart=/usr/bin/sshclientws
+Type=simple
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
