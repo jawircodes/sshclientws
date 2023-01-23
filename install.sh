@@ -1,8 +1,6 @@
 #!/bin/bash
 #installer Tunnaapi 
 
-cd
-
 #Install Tunnapi
 wget -O /usr/bin/sshclientws hhttps://raw.githubusercontent.com/jawircodes/sshclientws/main/sshclientws
 
@@ -21,3 +19,4 @@ systemctl enable sshclientws.service
 systemctl start sshclientws.service
 systemctl restart sshclientws.service
 
+rm -rf install.sh
