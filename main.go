@@ -11,6 +11,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"github.com/pusher/pusher-http-go/v5"
 )
 
 type Message struct {
@@ -40,6 +41,10 @@ type Host struct {
 	Cols     int    `form:"cols,default=120" json:"cols"`
 	Rows     int    `form:"rows,default=32" json:"rows"`
 }
+type Name struct {
+	Domain string `form:"domain" json:"domain" binding:"required"`
+	Value  string `form:"value" json:"value" binding:"required"`
+}
 
 func main() {
 	Init()
@@ -48,6 +53,7 @@ func main() {
 	e := gin.Default()
 	e.Use(cors.Default())
 	e.GET("/ws", WsSsh)
+	e.GET("/progress", Progress)
 	e.Run(fmt.Sprintf("%s:%d", HOST, PORT))
 
 }
@@ -111,4 +117,28 @@ func WsSsh(c *gin.Context) {
 	go ssConn.SessionWait(quitChan)
 
 	<-quitChan
+}
+func Progress(c *gin.Context) {
+	var name Name
+
+	binderr := c.ShouldBindQuery(&name)
+
+	if wshandleError(c, binderr) {
+		fmt.Println("er", binderr.Error())
+		return
+	}
+
+	pusherClient := pusher.Client{
+		AppID:   "1542521",
+		Key:     "72840d97fc6f02dc6d3f",
+		Secret:  "f9b4f0d647e5f83c4da0",
+		Cluster: "ap1",
+	}
+	fmt.Println(name.Domain, name.Value)
+	err := pusherClient.Trigger("my-channel", name.Domain, name.Value)
+
+	if err != nil {
+		panic(err)
+	}
+
 }

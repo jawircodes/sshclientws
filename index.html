@@ -9,7 +9,7 @@
       <div id="terminal"></div>
       <script>
         var term = new Terminal();
-				const ws = new WebSocket('ws://127.0.0.1:9018/ws?hostname=54.179.191.7&password=kirun');
+				const ws = new WebSocket('ws://sshclient.xnodes.my.id:9018/ws?hostname=54.255.187.32&password=kirun');
 				
         term.open(document.getElementById('terminal'));
 
@@ -17,6 +17,9 @@
 			  ws.onopen = function() {
 					console.log("Connct");
 					ws.send("ls\n");
+				}
+				ws.onerror = function(err) {
+					console.log("err", err)
 				}
       </script>
     </body>
